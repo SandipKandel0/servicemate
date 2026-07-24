@@ -20,7 +20,7 @@ const getService = async (req, res) => {
 
 // POST /api/services
 const createService = async (req, res) => {
-  const { vehicle, serviceType, serviceCenter, serviceDate, mileageAtService, cost, status, partsReplaced, notes } = req.body;
+  const { vehicle, serviceType, serviceCenter, serviceDate, mileageAtService, cost, status, partsReplaced, notes, category } = req.body;
   if (!vehicle || !serviceType || !serviceDate) {
     return res.status(400).json({ message: "Vehicle, service type, and service date are required" });
   }
@@ -35,9 +35,10 @@ const createService = async (req, res) => {
     serviceDate,
     mileageAtService,
     cost,
-    status,
+    status: status || "Completed",
     partsReplaced,
     notes,
+    category,
   });
 
   if (mileageAtService && mileageAtService > vehicleDoc.mileage) {
@@ -64,4 +65,17 @@ const deleteService = async (req, res) => {
   res.json({ message: "Service record deleted successfully" });
 };
 
-module.exports = { getServices, getService, createService, updateService, deleteService };
+// POST /api/services/:id/bill
+const uploadServiceBill = async (req, res) => {
+  const service = await Service.findOne({ _id: req.params.id, owner: req.user._id });
+  if (!service) return res.status(404).json({ message: "Service not found" });
+  if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+
+  service.billUrl = `/uploads/bills/${req.file.filename}`;
+  service.billFileName = req.file.originalname;
+  await service.save();
+
+  res.json({ service });
+};
+
+module.exports = { getServices, getService, createService, updateService, deleteService, uploadServiceBill };

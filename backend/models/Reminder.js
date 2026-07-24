@@ -11,6 +11,7 @@ const reminderSchema = new mongoose.Schema(
     },
     title: { type: String, required: true },
     dueDate: { type: Date, required: true },
+    targetMileage: { type: Number, default: null },
     priority: { type: String, enum: ["Low", "Medium", "High"], default: "Medium" },
     notes: { type: String, default: "" },
     pushNotification: { type: Boolean, default: true },

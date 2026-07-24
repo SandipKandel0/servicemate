@@ -13,7 +13,7 @@ const getReminders = async (req, res) => {
 
 // POST /api/reminders
 const createReminder = async (req, res) => {
-  const { vehicle, category, title, dueDate, priority, notes, pushNotification, emailReminder } = req.body;
+  const { vehicle, category, title, dueDate, targetMileage, priority, notes, pushNotification, emailReminder } = req.body;
   if (!vehicle || !title || !dueDate) {
     return res.status(400).json({ message: "Vehicle, title, and due date are required" });
   }
@@ -23,6 +23,7 @@ const createReminder = async (req, res) => {
     category,
     title,
     dueDate,
+    targetMileage,
     priority,
     notes,
     pushNotification,

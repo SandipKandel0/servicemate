@@ -24,6 +24,13 @@ const serviceSchema = new mongoose.Schema(
     },
     partsReplaced: [partSchema],
     notes: { type: String, default: "" },
+    billUrl: { type: String, default: "" },
+    billFileName: { type: String, default: "" },
+    category: {
+      type: String,
+      enum: ["Oil Change", "Insurance", "Inspection", "Tire Rotation", "Battery Check", "Other"],
+      default: "Other",
+    },
   },
   { timestamps: true }
 );

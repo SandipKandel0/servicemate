@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, ShieldCheck, BellRing, Save, Palette, Sun, Moon } from "lucide-react";
+import { User, ShieldCheck, BellRing, Save, Palette, Sun, Moon, HelpCircle, ChevronDown, Mail } from "lucide-react";
 import Topbar from "../components/Topbar";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
@@ -8,9 +8,33 @@ import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
 import { updateProfile, updateNotificationSettings } from "../api/authApi";
 
+const FAQS = [
+  {
+    q: "How do I add a new vehicle?",
+    a: "Go to Vehicles → Add Vehicle, fill in the make, model, year, and registration number, then save.",
+  },
+  {
+    q: "How do I log a service record?",
+    a: "Go to Services → Add Service, pick the vehicle, and fill in the service type, date, and odometer reading.",
+  },
+  {
+    q: "How do I upload a service bill?",
+    a: "Open a vehicle's detail page, expand a service in its history, and use the Upload Bill button — or attach it directly when logging a new service.",
+  },
+  {
+    q: "How do reminders work?",
+    a: "Create a reminder with a due date and/or mileage target from Reminders → New Reminder. It stays on your Reminders list until you mark it complete or dismiss it.",
+  },
+  {
+    q: "How do I switch between light and dark mode?",
+    a: "Toggle Dark Mode from the Appearance section above, or from the button in the sidebar.",
+  },
+];
+
 export default function Settings() {
   const { user, setUser } = useAuth();
   const { mode, toggleMode } = useTheme();
+  const [openFaq, setOpenFaq] = useState(null);
 
   const [profile, setProfile] = useState({ fullName: user?.fullName || "", phone: user?.phone || "" });
   const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -171,6 +195,46 @@ export default function Settings() {
             </section>
           </div>
         </div>
+
+        <section className="rounded-xl border border-slate-200 bg-white p-6">
+          <div className="flex items-center gap-2">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <HelpCircle className="h-4 w-4" />
+            </span>
+            <h2 className="text-base font-semibold text-slate-900">Help & Support</h2>
+          </div>
+
+          <div className="mt-4 divide-y divide-slate-100">
+            {FAQS.map((faq, idx) => {
+              const isOpen = openFaq === idx;
+              return (
+                <div key={faq.q}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenFaq(isOpen ? null : idx)}
+                    className="flex w-full items-center justify-between gap-4 py-3.5 text-left"
+                  >
+                    <span className="text-sm font-medium text-slate-700">{faq.q}</span>
+                    <ChevronDown className={`h-4 w-4 shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {isOpen && <p className="pb-3.5 text-sm text-slate-500">{faq.a}</p>}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 flex items-center justify-between rounded-lg bg-slate-50 px-4 py-3">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <Mail className="h-4 w-4 text-slate-400" />
+              Still need help? Reach out to support.
+            </div>
+            <a href="mailto:support@servicemate.app" className="text-sm font-medium text-primary-600 hover:underline">
+              support@servicemate.app
+            </a>
+          </div>
+
+          <p className="mt-4 text-center text-xs text-slate-400">ServiceMate v1.0.0</p>
+        </section>
       </div>
     </>
   );
