@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Car, CalendarClock, TriangleAlert, CheckCircle2, Plus } from "lucide-react";
+import { Car, CalendarClock, TriangleAlert, CheckCircle2, Plus, Activity, History } from "lucide-react";
 import Topbar from "../components/Topbar";
 import StatCard from "../components/StatCard";
 import StatusBadge from "../components/StatusBadge";
@@ -24,7 +24,6 @@ export default function Dashboard() {
     <>
       <Topbar
         title="Dashboard"
-        subtitle="Here's what's happening across your fleet."
         actions={
           <Link to="/vehicles/new">
             <Button>
@@ -43,7 +42,7 @@ export default function Dashboard() {
           data && (
             <>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <StatCard icon={Car} label="Total Vehicles" value={data.stats.totalVehicles} tone="primary" />
+                <StatCard icon={Car} label="Total Vehicles" value={data.stats.totalVehicles} tone="primary" highlight />
                 <StatCard icon={CalendarClock} label="Scheduled Services" value={data.stats.scheduledServices} tone="slate" />
                 <StatCard icon={TriangleAlert} label="Needs Attention" value={data.stats.needsAttention} tone="warning" />
                 <StatCard icon={CheckCircle2} label="Completed Services" value={data.stats.completedServices} tone="success" />
@@ -51,7 +50,12 @@ export default function Dashboard() {
 
               <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 <div className="rounded-xl border border-slate-200 bg-white p-6 lg:col-span-2">
-                  <h2 className="text-base font-semibold text-slate-900">Fleet Health Overview</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
+                      <Activity className="h-4 w-4" />
+                    </span>
+                    <h2 className="text-base font-semibold text-slate-900">Health Overview</h2>
+                  </div>
                   {data.fleetHealth.length === 0 ? (
                     <EmptyState text="Add a vehicle to see its health here." />
                   ) : (
@@ -77,7 +81,12 @@ export default function Dashboard() {
                 </div>
 
                 <div className="rounded-xl border border-slate-200 bg-white p-6">
-                  <h2 className="text-base font-semibold text-slate-900">Needs Attention</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-50 text-warning-600">
+                      <TriangleAlert className="h-4 w-4" />
+                    </span>
+                    <h2 className="text-base font-semibold text-slate-900">Needs Attention</h2>
+                  </div>
                   {data.needsAttention.length === 0 ? (
                     <EmptyState text="Nothing urgent — you're all caught up." />
                   ) : (
@@ -98,7 +107,12 @@ export default function Dashboard() {
 
               <div className="rounded-xl border border-slate-200 bg-white p-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-base font-semibold text-slate-900">Recent Services</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                      <History className="h-4 w-4" />
+                    </span>
+                    <h2 className="text-base font-semibold text-slate-900">Recent Services</h2>
+                  </div>
                   <Link to="/services" className="text-sm font-medium text-primary-600 hover:underline">
                     View All Activities
                   </Link>

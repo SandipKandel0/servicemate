@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
+import { useAuth } from "./context/AuthContext";
 
 import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
@@ -15,11 +16,27 @@ import Reminders from "./pages/Reminders";
 import AddReminder from "./pages/AddReminder";
 import Settings from "./pages/Settings";
 
+// Sends "/" and any unmatched path to Login if there's no active session,
+// or Dashboard if there is — instead of always assuming Dashboard.
+function RootRedirect() {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-(--color-surface)">
+        <div className="h-8 w-8 animate-spin rounded-full border-3 border-primary-200 border-t-primary-600" />
+      </div>
+    );
+  }
+
+  return <Navigate to={user ? "/dashboard" : "/login"} replace />;
+}
+
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -39,7 +56,7 @@ export default function App() {
         </Route>
       </Route>
 
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<RootRedirect />} />
     </Routes>
   );
 }

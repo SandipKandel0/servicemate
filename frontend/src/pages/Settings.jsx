@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { User, ShieldCheck, BellRing, Save } from "lucide-react";
+import { User, ShieldCheck, BellRing, Save, Palette, Sun, Moon } from "lucide-react";
 import Topbar from "../components/Topbar";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
 import Toggle from "../components/Toggle";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import { updateProfile, updateNotificationSettings } from "../api/authApi";
 
 export default function Settings() {
   const { user, setUser } = useAuth();
+  const { mode, toggleMode } = useTheme();
 
   const [profile, setProfile] = useState({ fullName: user?.fullName || "", phone: user?.phone || "" });
   const [isSavingProfile, setIsSavingProfile] = useState(false);
@@ -55,13 +57,15 @@ export default function Settings() {
 
   return (
     <>
-      <Topbar title="Settings" subtitle="Manage your account, security, and notification preferences." />
+      <Topbar title="Settings" />
 
       <div className="flex-1 space-y-6 p-8">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           <section className="rounded-xl border border-slate-200 bg-white p-6">
             <div className="flex items-center gap-2">
-              <User className="h-4.5 w-4.5 text-slate-400" />
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-50 text-primary-600">
+                <User className="h-4 w-4" />
+              </span>
               <h2 className="text-base font-semibold text-slate-900">User Profile</h2>
             </div>
 
@@ -96,7 +100,33 @@ export default function Settings() {
           <div className="space-y-6">
             <section className="rounded-xl border border-slate-200 bg-white p-6">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="h-4.5 w-4.5 text-slate-400" />
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-50 text-violet-600">
+                  <Palette className="h-4 w-4" />
+                </span>
+                <h2 className="text-base font-semibold text-slate-900">Appearance</h2>
+              </div>
+
+              <div className="mt-5 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {mode === "dark" ? (
+                    <Moon className="h-4 w-4 text-slate-400" />
+                  ) : (
+                    <Sun className="h-4 w-4 text-slate-400" />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium text-slate-700">Dark Mode</p>
+                    <p className="text-xs text-slate-500">Easier on the eyes in low light.</p>
+                  </div>
+                </div>
+                <Toggle checked={mode === "dark"} onChange={toggleMode} />
+              </div>
+            </section>
+
+            <section className="rounded-xl border border-slate-200 bg-white p-6">
+              <div className="flex items-center gap-2">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-success-50 text-success-600">
+                  <ShieldCheck className="h-4 w-4" />
+                </span>
                 <h2 className="text-base font-semibold text-slate-900">Security</h2>
               </div>
               <p className="mt-3 text-sm text-slate-500">
@@ -109,7 +139,9 @@ export default function Settings() {
 
             <section className="rounded-xl border border-slate-200 bg-white p-6">
               <div className="flex items-center gap-2">
-                <BellRing className="h-4.5 w-4.5 text-slate-400" />
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning-50 text-warning-600">
+                  <BellRing className="h-4 w-4" />
+                </span>
                 <h2 className="text-base font-semibold text-slate-900">Notifications</h2>
               </div>
 

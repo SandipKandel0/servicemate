@@ -9,7 +9,7 @@ export const formatDate = (value) => {
 
 export const formatCurrency = (value) => {
   const amount = Number(value) || 0;
-  return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
+  return new Intl.NumberFormat("en-NP", { style: "currency", currency: "NPR", maximumFractionDigits: 0 }).format(amount);
 };
 
 export const daysUntil = (value) => {

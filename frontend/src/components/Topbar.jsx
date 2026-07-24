@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 
-export default function Topbar({ title, subtitle, actions }) {
+export default function Topbar({ title, actions }) {
   const { user } = useAuth();
   const initials = (user?.fullName || "U")
     .split(" ")
@@ -11,11 +11,8 @@ export default function Topbar({ title, subtitle, actions }) {
     .toUpperCase();
 
   return (
-    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-5">
-      <div>
-        <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
-        {subtitle && <p className="mt-0.5 text-sm text-slate-500">{subtitle}</p>}
-      </div>
+    <header className="flex items-center justify-between border-b border-slate-200 bg-white px-8 py-5 shadow-sm">
+      <h1 className="text-xl font-semibold text-slate-900">{title}</h1>
 
       <div className="flex items-center gap-4">
         <div className="relative hidden sm:block">

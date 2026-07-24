@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Mail, Lock, AlertCircle } from "lucide-react";
 import AuthLayout from "../layouts/AuthLayout";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
@@ -32,7 +33,7 @@ export default function Login() {
   };
 
   return (
-    <AuthLayout tagline="Welcome back — your fleet's service history and upcoming reminders are right where you left them.">
+    <AuthLayout>
       <h1 className="text-2xl font-semibold text-slate-900">Welcome Back</h1>
       <p className="mt-1 text-sm text-slate-500">Sign in to continue to ServiceMate.</p>
 
@@ -41,7 +42,7 @@ export default function Login() {
           label="Email Address"
           type="email"
           required
-          placeholder="you@example.com"
+          icon={Mail}
           value={form.email}
           onChange={handleChange("email")}
         />
@@ -50,10 +51,9 @@ export default function Login() {
             label="Password"
             type="password"
             required
-            placeholder="Enter your password"
+            icon={Lock}
             value={form.password}
             onChange={handleChange("password")}
-            error={error}
           />
           <div className="mt-2 text-right">
             <Link to="/forgot-password" className="text-sm font-medium text-primary-600 hover:underline">
@@ -61,6 +61,13 @@ export default function Login() {
             </Link>
           </div>
         </div>
+
+        {error && (
+          <div className="flex items-center gap-2 rounded-lg bg-danger-50 px-3.5 py-2.5 text-sm text-danger-700">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            {error}
+          </div>
+        )}
 
         <Button type="submit" isLoading={isLoading} className="w-full">
           Sign in to ServiceMate

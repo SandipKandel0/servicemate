@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Enables class-based dark mode (toggled via .dark on <html>) instead of
+   Tailwind v4's default OS-preference-based dark: variant. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
@@ -50,4 +54,107 @@
     background-color: #cbd5e1;
     border-radius: 9999px;
   }
+}
+
+/* Gives every card-style container (the app's consistent rounded-xl white
+   panel pattern) a soft resting shadow instead of relying on a border alone
+   — needed now that pages sit on a tinted gradient rather than flat white,
+   where a border-only card reads as flat. Scoped tightly to that exact class
+   combination so it can't catch inputs/buttons that reuse bg-white + border. */
+.rounded-xl.border.border-slate-200.bg-white {
+  box-shadow: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.04);
+}
+
+/* Dark mode — retrofits the literal slate/white utility classes used across
+   the app onto a toggleable .dark ancestor, so components didn't all need
+   individual dark: variants added by hand. */
+.dark {
+  --color-surface: var(--color-slate-900);
+}
+.dark body {
+  color: var(--color-slate-100);
+}
+
+.dark .bg-white {
+  background-color: var(--color-slate-800);
+}
+.dark .bg-slate-50 {
+  background-color: var(--color-slate-800);
+}
+.dark .bg-slate-100 {
+  background-color: var(--color-slate-700);
+}
+.dark .bg-slate-200 {
+  background-color: var(--color-slate-600);
+}
+.dark .border-slate-100 {
+  border-color: var(--color-slate-700);
+}
+.dark .border-slate-200 {
+  border-color: var(--color-slate-700);
+}
+.dark .border-slate-300 {
+  border-color: var(--color-slate-600);
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--color-slate-700);
+}
+
+.dark .text-slate-900 {
+  color: var(--color-slate-50);
+}
+.dark .text-slate-800 {
+  color: var(--color-slate-100);
+}
+.dark .text-slate-700 {
+  color: var(--color-slate-200);
+}
+.dark .text-slate-600 {
+  color: var(--color-slate-300);
+}
+.dark .text-slate-500 {
+  color: var(--color-slate-400);
+}
+.dark .text-slate-400 {
+  color: var(--color-slate-500);
+}
+.dark .placeholder\:text-slate-400::placeholder {
+  color: var(--color-slate-500);
+}
+
+.dark .hover\:bg-slate-50:hover {
+  background-color: var(--color-slate-700);
+}
+.dark .focus\:bg-white:focus {
+  background-color: var(--color-slate-800);
+}
+
+.dark .bg-primary-50 {
+  background-color: color-mix(in srgb, var(--color-primary-500) 18%, transparent);
+}
+.dark .bg-success-50 {
+  background-color: color-mix(in srgb, var(--color-success-500) 18%, transparent);
+}
+.dark .bg-warning-50 {
+  background-color: color-mix(in srgb, var(--color-warning-500) 18%, transparent);
+}
+.dark .bg-danger-50 {
+  background-color: color-mix(in srgb, var(--color-danger-500) 18%, transparent);
+}
+
+.dark .text-primary-600,
+.dark .text-primary-700 {
+  color: var(--color-primary-200);
+}
+.dark .text-success-600,
+.dark .text-success-700 {
+  color: #86efac;
+}
+.dark .text-warning-600,
+.dark .text-warning-700 {
+  color: #fcd34d;
+}
+.dark .text-danger-600,
+.dark .text-danger-700 {
+  color: #fca5a5;
 }

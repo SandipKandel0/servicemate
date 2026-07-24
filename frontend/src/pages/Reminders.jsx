@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, BellRing, Check, X, Car } from "lucide-react";
+import { Plus, BellRing, Check, X, Car, Droplet, ShieldCheck, ClipboardCheck, Disc, BatteryCharging } from "lucide-react";
 import Topbar from "../components/Topbar";
 import Button from "../components/Button";
 import StatCard from "../components/StatCard";
@@ -12,6 +12,29 @@ const PRIORITY_BAR = {
   Medium: "border-l-warning-500",
   Low: "border-l-slate-300",
 };
+
+const PRIORITY_BADGE = {
+  High: "bg-danger-50 text-danger-600",
+  Medium: "bg-warning-50 text-warning-600",
+  Low: "bg-slate-100 text-slate-500",
+};
+
+const CATEGORY_STYLE = {
+  "Oil Change": { icon: Droplet, style: "bg-amber-50 text-amber-600" },
+  Insurance: { icon: ShieldCheck, style: "bg-violet-50 text-violet-600" },
+  Inspection: { icon: ClipboardCheck, style: "bg-sky-50 text-sky-600" },
+  "Tire Rotation": { icon: Disc, style: "bg-indigo-50 text-indigo-600" },
+  "Battery Check": { icon: BatteryCharging, style: "bg-rose-50 text-rose-600" },
+  Other: { icon: BellRing, style: "bg-slate-100 text-slate-500" },
+};
+
+function urgencyBadge(dueDate) {
+  const days = daysUntil(dueDate);
+  if (days < 0) return { text: `Overdue ${Math.abs(days)}d`, style: "bg-danger-50 text-danger-700" };
+  if (days === 0) return { text: "Due today", style: "bg-danger-50 text-danger-700" };
+  if (days <= 7) return { text: `${days}d left`, style: "bg-warning-50 text-warning-700" };
+  return { text: `${days}d left`, style: "bg-slate-100 text-slate-500" };
+}
 
 export default function Reminders() {
   const [reminders, setReminders] = useState([]);
@@ -50,7 +73,6 @@ export default function Reminders() {
     <>
       <Topbar
         title="Reminders"
-        subtitle="Stay ahead of upcoming maintenance and renewals."
         actions={
           <Link to="/reminders/new">
             <Button>
@@ -83,22 +105,33 @@ export default function Reminders() {
           </div>
         ) : (
           <div className="space-y-3">
-            {reminders.map((r) => (
+            {reminders.map((r) => {
+              const category = CATEGORY_STYLE[r.category] || CATEGORY_STYLE.Other;
+              const CategoryIcon = category.icon;
+              return (
               <div
                 key={r._id}
                 className={`flex items-center justify-between rounded-xl border border-l-4 border-slate-200 bg-white p-4 ${PRIORITY_BAR[r.priority]}`}
               >
                 <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50">
-                    <BellRing className="h-5 w-5 text-primary-600" />
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${category.style}`}>
+                    <CategoryIcon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="font-medium text-slate-800">{r.title}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-medium text-slate-800">{r.title}</p>
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${PRIORITY_BADGE[r.priority] || PRIORITY_BADGE.Low}`}>
+                        {r.priority}
+                      </span>
+                    </div>
                     <div className="mt-0.5 flex items-center gap-2 text-sm text-slate-500">
                       <Car className="h-3.5 w-3.5" />
                       {r.vehicle ? `${r.vehicle.make} ${r.vehicle.model}` : "—"}
                       <span className="text-slate-300">•</span>
                       Due {formatDate(r.dueDate)}
+                      <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${urgencyBadge(r.dueDate).style}`}>
+                        {urgencyBadge(r.dueDate).text}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -120,7 +153,8 @@ export default function Reminders() {
                   </button>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>

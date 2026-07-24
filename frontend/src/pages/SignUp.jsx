@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { User, Mail, Phone, Lock, AlertCircle } from "lucide-react";
 import AuthLayout from "../layouts/AuthLayout";
 import TextField from "../components/TextField";
 import Button from "../components/Button";
@@ -35,7 +36,7 @@ export default function SignUp() {
   };
 
   return (
-    <AuthLayout tagline="Track services, set reminders, and never miss a maintenance window across your entire fleet.">
+    <AuthLayout>
       <h1 className="text-2xl font-semibold text-slate-900">Create Account</h1>
       <p className="mt-1 text-sm text-slate-500">Sign up to start managing your vehicles.</p>
 
@@ -43,7 +44,7 @@ export default function SignUp() {
         <TextField
           label="Full Name"
           required
-          placeholder="John Doe"
+          icon={User}
           value={form.fullName}
           onChange={handleChange("fullName")}
         />
@@ -51,14 +52,14 @@ export default function SignUp() {
           label="Email Address"
           type="email"
           required
-          placeholder="you@example.com"
+          icon={Mail}
           value={form.email}
           onChange={handleChange("email")}
         />
         <TextField
           label="Phone Number"
           type="tel"
-          placeholder="+977 98XXXXXXXX"
+          icon={Phone}
           value={form.phone}
           onChange={handleChange("phone")}
         />
@@ -66,11 +67,18 @@ export default function SignUp() {
           label="Password"
           type="password"
           required
-          placeholder="At least 6 characters"
+          icon={Lock}
+          hint="At least 6 characters"
           value={form.password}
           onChange={handleChange("password")}
-          error={error}
         />
+
+        {error && (
+          <div className="flex items-center gap-2 rounded-lg bg-danger-50 px-3.5 py-2.5 text-sm text-danger-700">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            {error}
+          </div>
+        )}
 
         <Button type="submit" isLoading={isLoading} className="w-full">
           Continue

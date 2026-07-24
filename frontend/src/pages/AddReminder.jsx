@@ -60,7 +60,7 @@ export default function AddReminder() {
 
   return (
     <>
-      <Topbar title="Add New Reminder" subtitle="We'll surface this until it's marked complete." />
+      <Topbar title="Add New Reminder" />
 
       <div className="flex-1 p-8">
         <Link to="/reminders" className="mb-5 inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700">

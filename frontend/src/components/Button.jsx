@@ -1,7 +1,7 @@
 const VARIANTS = {
-  primary: "bg-primary-600 text-white hover:bg-primary-700 disabled:bg-primary-300",
+  primary: "bg-primary-600 text-white shadow-sm shadow-primary-600/30 hover:bg-primary-700 hover:shadow-md disabled:bg-primary-300 disabled:shadow-none",
   secondary: "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50",
-  danger: "bg-danger-500 text-white hover:bg-danger-700",
+  danger: "bg-danger-500 text-white shadow-sm shadow-danger-500/30 hover:bg-danger-700 hover:shadow-md",
 };
 
 export default function Button({
@@ -16,7 +16,7 @@ export default function Button({
     <button
       type={type}
       disabled={isLoading || rest.disabled}
-      className={`inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors disabled:cursor-not-allowed ${VARIANTS[variant]} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-all disabled:cursor-not-allowed ${VARIANTS[variant]} ${className}`}
       {...rest}
     >
       {isLoading && (
